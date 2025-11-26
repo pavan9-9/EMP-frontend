@@ -1,0 +1,56 @@
+/* Navbar main container */
+.navbar {
+  width: 100%;
+  background-color: #1e293b; /* dark navy */
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  position: fixed; /* stay on top always */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Logo alignment */
+.logo {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* Right side links */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: #38bdf8;   /* light blue */
+}
+
+/* Logout button */
+.logout-btn {
+  padding: 8px 14px;
+  background-color: #ef4444; /* red */
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-btn:hover {
+  background-color: #dc2626;
+}
