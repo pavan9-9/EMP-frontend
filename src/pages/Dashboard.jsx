@@ -27,8 +27,9 @@ export default function Dashboard() {
   }, []);
 
   const logout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  localStorage.removeItem("token");
+  navigate("/login", { replace: true }); 
+  window.location.reload();
   };
 
   return (

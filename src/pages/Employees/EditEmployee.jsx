@@ -6,46 +6,58 @@ export default function EditEmployee() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // State with same fields as EmployeeDTO
   const [employee, setEmployee] = useState({
     firstName: "",
     lastName: "",
-    email: "",
     phoneNumber: "",
-    dateOfBirth: "",
+    email: "",
     gender: "",
+    dateOfBirth: "",
     country: "",
     city: ""
   });
 
-  // Load employee data
+  // Load employee data by ID
   useEffect(() => {
-    axios.get(`http://localhost:8081/Employee/getEmpoyees/${id}`)
-      .then(res => {
-        setEmployee(res.data);
+    axios
+      .get(`http://localhost:8081/Employee/getEmpoyee/${id}`)
+      .then((res) => {
+        // Convert date to yyyy-mm-dd format for input[type="date"]
+        const empData = {
+          ...res.data,
+          dateOfBirth: res.data.dateOfBirth
+            ? res.data.dateOfBirth
+            : ""
+        };
+        setEmployee(empData);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }, [id]);
 
-  // Input handler
+  // Handle form input change
   const handleChange = (e) => {
     setEmployee({ ...employee, [e.target.name]: e.target.value });
   };
 
-  // Update API call
-  const updateEmployee = () => {
-    axios.put(`http://localhost:8081/Employee/updateEmployee/${id}`, employee)
+  // Submit update
+  const updateEmployee = (e) => {
+    e.preventDefault();
+
+    axios
+      .put(`http://localhost:8081/Employee/updateEmployee/${id}`, employee)
       .then(() => {
-        alert("Employee updated successfully");
+        alert("Employee updated successfully!");
         navigate("/employees/list");
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   };
 
   return (
     <div style={styles.container}>
       <h2>Edit Employee</h2>
 
-      <div style={styles.form}>
+      <form onSubmit={updateEmployee} style={styles.form}>
         <input
           name="firstName"
           placeholder="First Name"
@@ -63,14 +75,6 @@ export default function EditEmployee() {
         />
 
         <input
-          name="email"
-          placeholder="Email"
-          value={employee.email}
-          onChange={handleChange}
-          style={styles.input}
-        />
-
-        <input
           name="phoneNumber"
           placeholder="Phone Number"
           value={employee.phoneNumber}
@@ -79,17 +83,29 @@ export default function EditEmployee() {
         />
 
         <input
-          type="date"
-          name="dateOfBirth"
-          value={employee.dateOfBirth}
+          name="email"
+          placeholder="Email"
+          value={employee.email}
           onChange={handleChange}
           style={styles.input}
         />
 
-        <input
+        <select
           name="gender"
-          placeholder="Gender"
           value={employee.gender}
+          onChange={handleChange}
+          style={styles.input}
+        >
+          <option value="">Select Gender</option>
+          <option value="MALE">Male</option>
+          <option value="FEMALE">Female</option>
+          <option value="OTHER">Other</option>
+        </select>
+
+        <input
+          type="date"
+          name="dateOfBirth"
+          value={employee.dateOfBirth}
           onChange={handleChange}
           style={styles.input}
         />
@@ -109,46 +125,43 @@ export default function EditEmployee() {
           onChange={handleChange}
           style={styles.input}
         />
-      </div>
 
-      <button onClick={updateEmployee} style={styles.button}>
-        Update Employee
-      </button>
+        <button type="submit" style={styles.button}>
+          Update Employee
+        </button>
+      </form>
     </div>
   );
 }
 
-// Basic inline styling (can convert to CSS later)
+// Inline styles
 const styles = {
   container: {
-    width: "500px",
+    width: "450px",
     margin: "auto",
+    marginTop: "40px",
     padding: "20px",
-    background: "#f9f9f9",
+    background: "#f7f7f7",
     borderRadius: "10px",
-    marginTop: "30px",
-    boxShadow: "0 0 10px rgba(0,0,0,0.1)"
+    boxShadow: "0px 0px 10px rgba(0,0,0,0.1)"
   },
   form: {
     display: "grid",
-    gridTemplateColumns: "1fr",
     gap: "15px"
   },
   input: {
     padding: "12px",
-    fontSize: "16px",
-    borderRadius: "8px",
-    border: "1px solid #ccc"
+    borderRadius: "6px",
+    border: "1px solid #ccc",
+    fontSize: "16px"
   },
   button: {
-    width: "100%",
     padding: "12px",
-    fontSize: "18px",
-    marginTop: "20px",
-    backgroundColor: "#007bff",
-    color: "white",
+    background: "#007bff",
+    color: "#fff",
     border: "none",
-    borderRadius: "8px",
-    cursor: "pointer"
+    borderRadius: "6px",
+    cursor: "pointer",
+    fontSize: "16px"
   }
 };
